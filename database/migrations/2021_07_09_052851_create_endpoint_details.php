@@ -25,7 +25,7 @@ class CreateEndpointDetails extends Migration
             $table->string('app_key', 155)->nullable();
             $table->string('app_secret', 155)->nullable();
             $table->string('username', 50)->nullable();
-            $table->string('password', 50)->nullable();
+            $table->string('password', 150)->nullable();
 
             $table->softDeletes('deleted_at');
             $table->timestamps();

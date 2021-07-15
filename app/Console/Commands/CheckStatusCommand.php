@@ -2,6 +2,7 @@
 
 namespace App\Console\Commands;
 
+use App\Events\AppStatusUpdated;
 use App\Models\EndpointDetail;
 use Illuminate\Console\Command;
 use Illuminate\Support\Facades\Http;
@@ -112,6 +113,8 @@ class CheckStatusCommand extends Command
             'extras' => $apache_response['extras']
         ]);
 
+        event(new AppStatusUpdated($application->application_code));
+
         return 0;
     }
 
@@ -148,7 +151,7 @@ class CheckStatusCommand extends Command
         switch ($authorization_type) {
             case "basic_auth":
                 $credentials['username'] = $endpointDetail->username;
-                $credentials['password'] = $endpointDetail->password;
+                $credentials['password'] = base64_decode($endpointDetail->password);
                 break;
 
             case "api_key_auth":

@@ -30,6 +30,7 @@ Route::middleware('auth')->group(function () {
         Route::get('/edit/{code}', [App\Http\Controllers\ApplicationController::class, 'edit'])->name('application.edit');
         Route::get('/get-data', [App\Http\Controllers\ApplicationController::class, 'get_data'])->name('application.get');
         Route::get('/create-endpoint-param-row', [App\Http\Controllers\ApplicationController::class, 'create_endpoint_param_row'])->name('application.create_endpoint_param_row');
+        Route::get('/update/row', [App\Http\Controllers\ApplicationController::class, 'row_update'])->name('application.row_update');
 
         Route::post('/save', [App\Http\Controllers\ApplicationController::class, 'store'])->name('application.save');
 

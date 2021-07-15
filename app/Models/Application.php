@@ -39,7 +39,8 @@ class Application extends Model
     protected $with = [
         'webhooks',
         'endpoint_detail',
-        'endpoint_params'
+        'endpoint_params',
+        'health_logs'
     ];
 
     protected static $endpoint_info = [];
@@ -74,6 +75,11 @@ class Application extends Model
         return $this->hasMany(EndpointParam::class, 'application_id', 'id');
     }
 
+    public function health_logs()
+    {
+        return $this->hasMany(HealthLog::class, 'application_id', 'id')->orderBy('id', 'desc');
+    }
+
     public function save($options = [])
     {
         $success = false;
@@ -95,7 +101,7 @@ class Application extends Model
 
                     if ($endpoint_info['details']['authorization_type'] == "basic_auth") {
                         $this->endpoint_detail->username = $endpoint_info['details']['username'];
-                        $this->endpoint_detail->password = $endpoint_info['details']['password'];
+                        $this->endpoint_detail->password = base64_encode($endpoint_info['details']['password']);
                     }
 
                     if ($endpoint_info['details']['authorization_type'] == "api_key_auth") {

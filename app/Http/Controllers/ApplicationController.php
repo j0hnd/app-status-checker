@@ -188,7 +188,7 @@ class ApplicationController extends Controller
             })
             ->addColumn('actions', function ($row) {
                 $buttons = "<button class='btn btn-link toggle-edit-application' title='Edit' data-code='". $row->application_code ."'><i class='fa fa-eye' aria-hidden='true'></i></button>";
-                $buttons .= "<button class='btn btn-link text-danger toggle-logs-application' title='Logs'><i class='fa fa-server' aria-hidden='true'></i></button>";
+                $buttons .= "<button class='btn btn-link text-secondary toggle-logs-application' title='Logs'><i class='fa fa-heartbeat' aria-hidden='true'></i></button>";
                 $buttons .= "<button class='btn btn-link text-secondary toggle-remove-application' title='Remove' data-code='". $row->application_code ."'><i class='fa fa-trash' aria-hidden='true'></i></button>";
 
                 return $buttons;
@@ -202,5 +202,65 @@ class ApplicationController extends Controller
         return response()->json([
             'html' => view('application.partials.endpoint_param_row', ['endpoint_params' => null])->render()
         ], 200);
+    }
+
+    public function row_update(Request $request): JsonResponse
+    {
+        $response = ['success' => false];
+        $http_code = 401;
+
+        if ($request->ajax()) {
+
+            if ($request->has('application_code')) {
+                $application_code = $request->get('application_code');
+
+                $application = $this->applicationRepository->findByApplicationCode($application_code);
+
+                if ($application) {
+                    foreach ($application->health_logs as $logs) {
+                        if ($logs->http_code >= 400 and $logs->http_code <= 500) {
+                            $callout = "callout-warning";
+                            $icon = "<i class='fa fa-exclamation-triangle' aria-hidden='true'></i>";
+                            $font_color = "text-warning";
+                        } elseif ($logs->http_code >= 500 and $logs->http_code <= 600) {
+                            $callout = "callout-danger";
+                            $icon = "<i class='fa fa-times' aria-hidden='true'></i>";
+                            $font_color = "text-danger";
+                        } elseif ($logs->http_code >= 200 and $logs->http_code <= 300) {
+                            $callout = "callout-success";
+                            $icon = "<i class='fa fa-check' aria-hidden='true'></i>";
+                            $font_color = "text-success";
+                        } else {
+                            $callout = "callout-secondary";
+                            $icon = "<i class='fa fa-minus' aria-hidden='true'></i>";
+                            $font_color = "text-secondary";
+                        }
+
+                        $row = view('dashboard.partials._row', [
+                            'callout' => $callout,
+                            'font_color' => $font_color,
+                            'icon' => $icon,
+                            'application_name' => $application->name,
+                            'created_at' => $logs->created_at->format('M d, Y H:i:s'),
+                            'http_code' => $logs->http_code
+                        ])->render();
+
+                        $response = [
+                            'success' => true,
+                            'data' => [
+                                'row' => $row
+                            ]
+                        ];
+
+                        $http_code = 200;
+
+                        break;
+                    }
+                }
+            }
+
+        }
+
+        return response()->json($response, $http_code);
     }
 }
