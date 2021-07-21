@@ -241,6 +241,7 @@ class ApplicationController extends Controller
                             'font_color' => $font_color,
                             'icon' => $icon,
                             'application_name' => $application->name,
+                            'application_code' => $application->application_code,
                             'created_at' => $logs->created_at->format('M d, Y H:i:s'),
                             'http_code' => $logs->http_code
                         ])->render();

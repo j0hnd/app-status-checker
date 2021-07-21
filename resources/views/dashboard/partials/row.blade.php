@@ -2,7 +2,7 @@
     @foreach($applications as $application)
 
         @if($application->health_logs)
-            @foreach($application->health_logs as $logs)
+            @foreach($application->health_logs->take(1) as $logs)
 
                 @php
                     if ($logs->http_code >= 400 and $logs->http_code <= 500) {
@@ -24,22 +24,20 @@
                     }
                 @endphp
 
-                <div class="row" id="app-{{ $application->application_code }}">
-                    <div class="col-md-12">
-                        <div class="callout {{ $callout }}">
-                            <div class="row">
-                                <div class="col-9">
-                                    <h5><span class="{{ $font_color }} mr-2">{!! $icon !!}</span> {{ $application->name }}</h5>
-                                    <p>Date/Time: {{ $logs->created_at->format('M d, Y H:i:s') }} ( {{ config('app.timezone') }} )</p>
-                                </div>
-                                <div class="col-3 text-right {{ $font_color }} pt-3">
-                                    <h4><small style="color: #000; font-size: 11px;">HTTP Code: </small><strong>{{ $logs->http_code }}</strong></h4>
-                                </div>
+                <div class="col-md-4" id="app-{{ $application->application_code }}">
+                    <div class="callout {{ $callout }}">
+                        <div class="row">
+                            <div class="col-8">
+                                <h5><span class="{{ $font_color }} mr-2">{!! $icon !!}</span> {{ $application->name }}</h5>
+                                <p>Date/Time: {{ $logs->created_at->format('M d, Y H:i:s') }} ( {{ config('app.timezone') }} )</p>
+                            </div>
+                            <div class="col-4 text-right {{ $font_color }}">
+                                <h4><small style="color: #000; font-size: 11px;">HTTP Code: </small><strong>{{ $logs->http_code }}</strong></h4>
+                                <button class="btn btn-info btn-sm text-white toggle-app-refresh" title="Refresh" data-code="{{ $application->application_code }}"><i class="fa fa-retweet fa-1x" aria-hidden="true"></i></button>
                             </div>
                         </div>
                     </div>
                 </div>
-                @break
             @endforeach
         @endif
 

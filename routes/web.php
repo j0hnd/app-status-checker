@@ -16,12 +16,16 @@ use Illuminate\Support\Facades\Route;
 Route::get('/', [App\Http\Controllers\Auth\LoginController::class, 'index']);
 Route::get('/login', [App\Http\Controllers\Auth\LoginController::class, 'index'])->name('login');
 Route::get('/logout', [App\Http\Controllers\Auth\LoginController::class, 'logout'])->name('logout');
+Route::get('/public/logs', [App\Http\Controllers\DashboardController::class, 'public_logs'])->name('dashboard.logs');
+
 Route::post('/authenticate', [App\Http\Controllers\Auth\LoginController::class, 'authenticate'])->name('authenticate');
 Route::post('/forgot/password', [App\Http\Controllers\Auth\LoginController::class, 'forgot_password'])->name('forgot_password');
 
 Route::middleware('auth')->group(function () {
     Route::prefix('dashboard')->group(function () {
         Route::get('/', [App\Http\Controllers\DashboardController::class, 'index'])->name('dashboard.index');
+        Route::get('/refresh', [App\Http\Controllers\DashboardController::class, 'manual_refresh'])->name('dashboard.manual_refresh');
+        Route::get('/refresh/{application_code}', [App\Http\Controllers\DashboardController::class, 'manual_refresh'])->name('dashboard.single_app_refresh');
     });
 
     Route::prefix('application')->group(function () {

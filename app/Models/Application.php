@@ -77,7 +77,8 @@ class Application extends Model
 
     public function health_logs()
     {
-        return $this->hasMany(HealthLog::class, 'application_id', 'id')->orderBy('id', 'desc');
+        return $this->hasMany(HealthLog::class, 'application_id', 'id')
+            ->orderBy('id', 'desc');
     }
 
     public function save($options = [])
@@ -93,31 +94,33 @@ class Application extends Model
 
             if (! empty($endpoint_info)) {
                 // save endpoint details
-                if ($this->endpoint_detail) {
-                    $this->endpoint_detail->method = $endpoint_info['details']['method'];
-                    $this->endpoint_detail->field_type = $endpoint_info['details']['field_type'];
-                    $this->endpoint_detail->token_url = $endpoint_info['details']['token_url'];
-                    $this->endpoint_detail->authorization_type = $endpoint_info['details']['authorization_type'];
+                if ($endpoint_info['details']['method'] != "Select Method" or ! is_null($endpoint_info['details']['token_url'])) {
+                    if ($this->endpoint_detail) {
+                        $this->endpoint_detail->method = $endpoint_info['details']['method'];
+                        $this->endpoint_detail->field_type = $endpoint_info['details']['field_type'];
+                        $this->endpoint_detail->token_url = $endpoint_info['details']['token_url'];
+                        $this->endpoint_detail->authorization_type = $endpoint_info['details']['authorization_type'];
 
-                    if ($endpoint_info['details']['authorization_type'] == "basic_auth") {
-                        $this->endpoint_detail->username = $endpoint_info['details']['username'];
-                        $this->endpoint_detail->password = base64_encode($endpoint_info['details']['password']);
+                        if ($endpoint_info['details']['authorization_type'] == "basic_auth") {
+                            $this->endpoint_detail->username = $endpoint_info['details']['username'];
+                            $this->endpoint_detail->password = base64_encode($endpoint_info['details']['password']);
+                        }
+
+                        if ($endpoint_info['details']['authorization_type'] == "api_key_auth") {
+                            $this->endpoint_detail->app_key = $endpoint_info['details']['app_key'];
+                            $this->endpoint_detail->app_secret = $endpoint_info['details']['app_secret'];
+                        }
+
+                        $this->endpoint_detail()->save($this->endpoint_detail);
+                    } else {
+                        $endpoint_info['details']['application_id'] = $this->id;
+                        $endpoint_details = new EndpointDetail($endpoint_info['details']);
+                        $this->endpoint_detail()->save($endpoint_details);
                     }
-
-                    if ($endpoint_info['details']['authorization_type'] == "api_key_auth") {
-                        $this->endpoint_detail->app_key = $endpoint_info['details']['app_key'];
-                        $this->endpoint_detail->app_secret = $endpoint_info['details']['app_secret'];
-                    }
-
-                    $this->endpoint_detail()->save($this->endpoint_detail);
-                } else {
-                    $endpoint_info['details']['application_id'] = $this->id;
-                    $endpoint_details = new EndpointDetail($endpoint_info['details']);
-                    $this->endpoint_detail()->save($endpoint_details);
                 }
 
                 // save endpoint params
-                if (! empty($endpoint_info['params'])) {
+                if (! empty($endpoint_info['params']) or ! is_null($endpoint_info['params'])) {
                     $this->endpoint_params()->delete();
 
                     foreach ($endpoint_info['params'] as  $param) {
@@ -147,7 +150,6 @@ class Application extends Model
             DB::commit();
             $success = true;
         } catch (\Exception $exception) {
-            dd($exception);
             DB::rollBack();
         }
 

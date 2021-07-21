@@ -22,14 +22,23 @@
         <div class="card card-primary">
             <div class="card-header">
                 <div class="row">
-                    <a href="javascript:void(0)" class="btn btn-lg text-white float-right">
-                        <h3 class="card-title">Pings</h3>
-                    </a>
+                    <div class="col-10" style="text-align: left">
+                        <a href="javascript:void(0)" class="btn btn-lg text-white">
+                            <h3 class="card-title">Pings</h3>
+                        </a>
+                    </div>
+
+                    <div class="col-2 mt-2" style="text-align: right">
+                        <a href="javascript:void(0)" class="mr-2" id="toggle-refresh-logs" title="Refresh Logs"><i class="fa fa-retweet fa-1x" aria-hidden="true"></i></a>
+                        <a href="{{ route('dashboard.logs') }}" target="_blank" title="Open logs on separate window"><i class="fa fa-share fa-1x" aria-hidden="true"></i></a>
+                    </div>
                 </div>
             </div>
 
             <div class="card-body">
-                @include('dashboard.partials.row', ['applications' => $applications])
+                <div class="row">
+                    @include('dashboard.partials.row', ['applications' => $applications])
+                </div>
             </div>
         </div>
     </div>
@@ -43,5 +52,9 @@
         @else
         Pusher.logToConsole = true;
         @endif
+
+        $(function () {
+            $('.callout').matchHeight();
+        });
     </script>
 @endsection

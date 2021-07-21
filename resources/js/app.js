@@ -14,4 +14,4 @@ Echo.channel('apps')
                 }
             }
         });
-    })
+    });

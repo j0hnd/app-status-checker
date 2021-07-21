@@ -221,6 +221,7 @@
 {{--components--}}
 <script src="{{ asset('js/components/common.js') }}"></script>
 <script src="{{ asset('js/components/application.js') }}"></script>
+<script src="{{ asset('js/components/dashboard.js') }}"></script>
 
 <!-- Custom Scripts -->
 @yield('custom-scripts')

@@ -37,22 +37,25 @@ class ApplicationRepository extends  BaseRepository implements ApplicationReposi
     public function all(): Collection
     {
         return Application::select('id', 'name', 'application_code', 'application_url', 'application_type', 'is_monitored')
-            ->orderBy('created_at', 'desc')->get();
+            ->orderBy('created_at', 'desc')
+            ->get();
     }
 
     public function findApplicationsForMonitoring(): Collection
     {
-        return Application::select('id', 'name', 'application_code', 'application_url', 'application_type', 'is_monitored', 'frequency')
+        return Application::with('health_logs')
+            ->select('id', 'name', 'application_code', 'application_url', 'application_type', 'is_monitored', 'frequency')
             ->where('is_monitored', 1)
             ->get();
     }
 
     public function findApplicationForMonitoring($code): Collection
     {
-        return Application::select('id', 'name', 'application_code', 'application_url', 'application_type', 'is_monitored', 'frequency')
+        return Application::with('health_logs')
+            ->select('id', 'name', 'application_code', 'application_url', 'application_type', 'is_monitored', 'frequency')
             ->where('application_code', $code)
             ->where('is_monitored', 1)
-            ->firstOrFail();
+            ->get();
     }
 
     public function findByApplicationCode($code): Model

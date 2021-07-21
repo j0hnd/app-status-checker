@@ -20,4 +20,10 @@ In your .env file, supply the necessary details.
 
 ### Run these NPM commands:
 - npm install
-- npm run dev
+- npm run <dev|prod>
+
+### Pusher ###
+make sure you have a Pusher account and supply your credentials on .env file
+
+### Scheduling ###
+add **schedule:run** on cronjob and set the execution time every minute.

@@ -28,10 +28,12 @@ mix.js('resources/js/app.js', 'public/js')
     .copy('resources/plugins/datatables-buttons/js/buttons.bootstrap4.min.js', 'public/js/plugins')
     .copy('resources/plugins/select2/js/select2.full.min.js', 'public/js/plugins')
     .copy('resources/plugins/adminlte/js/adminlte.min.js', 'public/js/plugins')
+    .copy('resources/plugins/match-height/matchHeight.js', 'public/js/plugins')
     .copy('resources/js/components/common.js', 'public/js/components')
     .copy('resources/js/components/application.js', 'public/js/components')
     .copy('resources/js/components/login.js', 'public/js/components')
     .copy('resources/js/components/reset_password.js', 'public/js/components')
+    .copy('resources/js/components/dashboard.js', 'public/js/components')
 
     // css
     .copy('resources/plugins/fontawesome-free/css/all.min.css', 'public/css/plugins')

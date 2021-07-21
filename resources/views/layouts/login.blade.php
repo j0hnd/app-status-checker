@@ -14,7 +14,7 @@
     <link href="{{ asset('css/plugins/all.min.css') }}" rel="stylesheet">
 
     <!-- icheck bootstrap -->
-    <link href="{{ asset('css/plugins/icheck-bootstrap/icheck-bootstrap.min.css') }}" rel="stylesheet">
+    <link href="{{ asset('css/plugins/icheck-bootstrap.min.css') }}" rel="stylesheet">
 
     <!-- Ionicons -->
     <link rel="stylesheet" href="//code.ionicframework.com/ionicons/2.0.1/css/ionicons.min.css">
@@ -24,6 +24,8 @@
 
     <!-- Google Font: Source Sans Pro -->
     <link href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,400i,700" rel="stylesheet">
+
+    @yield('custom-styles')
 </head>
 
 <body class="hold-transition login-page">
@@ -41,7 +43,9 @@
 <script src="{{ asset('js/plugins/jquery.validate.min.js') }}"></script>
 <script src="{{ asset('js/plugins/additional-methods.js') }}"></script>
 <script src="{{ asset('js/plugins/adminlte.min.js') }}"></script>
+<script src="{{ asset('js/plugins/matchHeight.js') }}"></script>
 <script src="{{ asset('js/components/login.js') }}"></script>
 <script src="{{ asset('js/components/reset_password.js') }}"></script>
+@yield('custom-scripts')
 </body>
 </html>
