@@ -56,6 +56,7 @@ class WebhookController extends Controller
         $response = ['success' => false];
         $http_code = 400;
         $is_active = Webhook::WEBHOOK_NOT_ACTIVE;
+        $send_all_codes = Webhook::NOT_SEND_ALL_HTTP_CODE;
 
         if ($request->ajax()) {
             if ($request->isMethod('POST')) {
@@ -65,10 +66,15 @@ class WebhookController extends Controller
                     $is_active = Webhook::WEBHOOK_ACTIVE;
                 }
 
+                if ($request->get('send_all_codes')) {
+                    $send_all_codes = Webhook::SEND_ALL_HTTP_CODE;
+                }
+
                 $webhook = $this->webhookRepository->create([
                     'name' => $input['name'],
                     'url' => $input['url'],
-                    'is_active' => $is_active
+                    'is_active' => $is_active,
+                    'send_all_codes' => $send_all_codes
                 ]);
 
                 if ($webhook) {
@@ -141,6 +147,7 @@ class WebhookController extends Controller
         $response = ['success' => false];
         $http_code = 400;
         $is_active = Webhook::WEBHOOK_NOT_ACTIVE;
+        $send_all_codes = Webhook::NOT_SEND_ALL_HTTP_CODE;
 
         $webhook = $this->webhookRepository->findByWebhookCode($code);
 
@@ -149,9 +156,14 @@ class WebhookController extends Controller
                 $is_active = Webhook::WEBHOOK_ACTIVE;
             }
 
+            if ($request->get('send_all_codes')) {
+                $send_all_codes = Webhook::SEND_ALL_HTTP_CODE;
+            }
+
             $webhook->name = $request->get('name');
             $webhook->url = $request->get('url');
             $webhook->is_active = $is_active;
+            $webhook->send_all_codes = $send_all_codes;
 
             if ($webhook->save()) {
                 $application_ids = $request->get('application_ids');

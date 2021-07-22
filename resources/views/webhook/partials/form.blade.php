@@ -24,4 +24,10 @@
             @endif
         </select>
     </div>
+    <div class="form-check p-3">
+        <input class="form-check-input" type="checkbox" value="on" id="send_all" name="send_all_codes" value="on" {{ isset($webhook) ? $webhook->send_all_codes === 1 ? "checked" : "" : "" }}>
+        <label class="form-check-label" for="send_all">
+            Send all HTTP Codes
+        </label>
+    </div>
 </div>

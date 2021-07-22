@@ -53,21 +53,21 @@
         <!-- Left navbar links -->
         <ul class="navbar-nav">
             <li class="nav-item">
-                <a class="nav-link" data-widget="pushmenu" href="#" role="button"><i class="fas fa-bars"></i></a>
+                <a class="nav-link" data-widget="pushmenu" href="javascript:void(0)" role="button"><i class="fas fa-bars"></i></a>
             </li>
             <li class="nav-item d-none d-sm-inline-block">
-                <a href="#" class="nav-link">{{ $page_title }}</a>
+                <a href="javascript:void(0)" class="nav-link">{{ $page_title }}</a>
             </li>
         </ul>
 
          <ul class="navbar-nav ml-auto">
              <li class="nav-item">
-                 <a class="nav-link" data-widget="fullscreen" data-slide="true" href="#" role="button">
+                 <a class="nav-link" data-widget="fullscreen" data-slide="true" href="javascript:void(0)" role="button">
                      <i class="fas fa-compress-arrows-alt"></i>
                  </a>
              </li>
              <li class="nav-item">
-                 <a class="nav-link" data-widget="control-sidebar" data-slide="true" href="#" role="button">
+                 <a class="nav-link" data-widget="control-sidebar" data-slide="true" href="javascript:void(0)" role="button">
                      <i class="fas fa-th-large"></i>
                  </a>
              </li>
@@ -78,7 +78,7 @@
     <!-- Main Sidebar Container -->
     <aside class="main-sidebar sidebar-dark-primary elevation-4">
         <!-- Brand Logo -->
-        <a href="#" class="brand-link">
+        <a href="javascript:void(0)" class="brand-link">
             <img src="/img/logo-small.png"
                  alt="App Status Checker"
                  class="brand-image img-circle elevation-3"
@@ -94,7 +94,7 @@
                     <img src="/img/avatar/avatar04.png" class="img-circle elevation-2" alt="User Image">
                 </div>
                 <div class="info">
-                    <a href="#" class="d-block">{{ ucwords(Auth::user()->firstname ) }} {{ ucwords(Auth::user()->lastname) }}</a>
+                    <a href="javascript:void(0)" class="d-block">{{ ucwords(Auth::user()->firstname ) }} {{ ucwords(Auth::user()->lastname) }}</a>
                 </div>
             </div>
 
@@ -121,8 +121,14 @@
                             <p>Webhooks</p>
                         </a>
                     </li>
+                    <li class="nav-item">
+                        <a href="{{ route('heartbeat.index') }}" class="nav-link {{ $page_title == "Logs" ? "active" : "" }}">
+                            <i class="nav-icon fas fa-list-ul" aria-hidden="true"></i>
+                            <p>Logs</p>
+                        </a>
+                    </li>
                     <li class="nav-item has-treeview {{ $page_title == 'Users' ? ' menu-is-opening menu-open' : '' }}">
-                        <a href="#" class="nav-link">
+                        <a href="javascript:void(0)" class="nav-link">
                             <i class="nav-icon fas fa-cog"></i>
                             <p>Settings<i class="fas fa-angle-left right"></i></p>
                         </a>
@@ -167,9 +173,9 @@
                     </div>
                     <div class="col-sm-6">
                         <ol class="breadcrumb float-sm-right">
-                            <li class="breadcrumb-item"><a href="#">{{ $breadcrumb_parent }}</a></li>
+                            <li class="breadcrumb-item"><a href="javascript:void(0)">{{ $breadcrumb_parent }}</a></li>
                             @if(isset($breadcrumb_child))
-                            <li class="breadcrumb-item"><a href="#">{{ $breadcrumb_child }}</a></li>
+                            <li class="breadcrumb-item"><a href="javascript:void(0)">{{ $breadcrumb_child }}</a></li>
                             @endif
                         </ol>
                     </div>
@@ -217,6 +223,7 @@
 <script src="{{ asset('js/plugins/jquery.dataTables.min.js') }}"></script>
 <script src="{{ asset('js/plugins/dataTables.bootstrap4.min.js') }}"></script>
 <script src="{{ asset('js/plugins/select2.full.min.js') }}"></script>
+<script src="{{ asset('js/plugins/matchHeight.js') }}"></script>
 
 {{--components--}}
 <script src="{{ asset('js/components/common.js') }}"></script>

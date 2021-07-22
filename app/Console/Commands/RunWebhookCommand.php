@@ -77,6 +77,10 @@ class RunWebhookCommand extends Command
                             $log = $this->healthLogRepository->getRecentApplicationLog($application->id);
 
                             if ($log) {
+                                if ($active_webhook->send_all_codes == 0 and $log->http_code < 300) {
+                                    continue;
+                                }
+
                                 $content = "App Name: {$application->name}\n";
                                 $content .= "HTTP Status: {$log->http_code}\n";
                                 $content .= "Timestamp: {$log->created_at->format('M d, Y H:i:s')} (".config('app.timezone').")";

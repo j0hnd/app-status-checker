@@ -12,5 +12,7 @@ interface HealthLogRepositoryInterface
 
     public function getRecentApplicationLogs($application_id): Collection;
 
+    public function getApplicationLogs($application_id): Collection;
+
     public function getRecentApplicationLog($application_id): Model;
 }

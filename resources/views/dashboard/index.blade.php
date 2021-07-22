@@ -36,7 +36,24 @@
             </div>
 
             <div class="card-body">
-                <div class="row">
+                <div class="row mb-5">
+                    <div class="col-md-12">
+                        <form class="form-inline">
+                            <div class="form-group" style="width: 40%">
+                                <select class="form-control" id="filter-group" data-placeholder="Filter by group" style="width: 95%;">
+                                    <option value="">Select a Group</option>
+                                    @if(! is_null($groups))
+                                        @foreach($groups as $group)
+                                            <option value="{{ $group->group }}">{{ $group->group }}</option>
+                                        @endforeach
+                                    @endif
+                                </select>
+                            </div>
+                            <button class="btn btn-primary" id="toggle-group-filter"><i class="fa fa-filter" aria-hidden="true"></i></button>
+                        </form>
+                    </div>
+                </div>
+                <div class="row" id="application-status-wrapper">
                     @include('dashboard.partials.row', ['applications' => $applications])
                 </div>
             </div>

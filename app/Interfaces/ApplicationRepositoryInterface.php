@@ -18,5 +18,9 @@ interface ApplicationRepositoryInterface
 
     public function findByApplicationCode($code): Model;
 
+    public function findByGroup($group): Collection;
+
+    public function getGroups(): Collection;
+
     public function delete(Application $application);
 }

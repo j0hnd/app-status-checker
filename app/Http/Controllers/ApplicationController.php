@@ -35,7 +35,8 @@ class ApplicationController extends Controller
         return view('application.create', [
             'page_title' => 'Add Application',
             'breadcrumb_parent' => 'Application',
-            'breadcrumb_child' => 'Add'
+            'breadcrumb_child' => 'Add',
+            'groups' => $this->applicationRepository->getGroups()
         ]);
     }
 
@@ -48,7 +49,7 @@ class ApplicationController extends Controller
 
         if ($request->ajax()) {
             if ($request->isMethod('POST')) {
-                $input = $request->only(['name', 'description', 'application_url', 'application_type', 'is_monitored', 'frequency']);
+                $input = $request->only(['name', 'description', 'application_url', 'application_type', 'is_monitored', 'frequency', 'group']);
 
                 if ($request->get('is_monitored')) {
                     $is_monitored = Application::APPLICATION_IS_MONITORED;
@@ -76,6 +77,7 @@ class ApplicationController extends Controller
                 $application->description = $input['description'];
                 $application->application_url = $input['application_url'];
                 $application->application_type = $input['application_type'];
+                $application->group = $input['group'];
                 $application->is_monitored = $is_monitored;
                 $application->frequency = $frequency;
                 $application->added_by = Auth::user()->id;
@@ -107,7 +109,8 @@ class ApplicationController extends Controller
             'page_title' => 'Update Application',
             'breadcrumb_parent' => 'Application',
             'breadcrumb_child' => 'Update',
-            'application' => $application
+            'application' => $application,
+            'groups' => $this->applicationRepository->getGroups()
         ]);
     }
 
@@ -130,6 +133,7 @@ class ApplicationController extends Controller
             $application->application_url = $request->get('application_url');
             $application->application_type = $request->get('application_type');
             $application->description = $request->get('description');
+            $application->group = $request->get('group');
             $application->is_monitored = $is_monitored;
             $application->frequency = $frequency;
 

@@ -7,7 +7,7 @@
             <div class="card card-primary">
                 <div class="card-header">
                     <div class="row">
-                        <a href="#" class="btn btn-lg text-white float-right" id="toggle-add-webhook">
+                        <a href="javascript:void(0)" class="btn btn-lg text-white float-right" id="toggle-add-webhook">
                             <h3 class="card-title"><i class="fa fa-plus-square mr-3" aria-hidden="true"></i>List of Webhooks</h3>
                         </a>
                     </div>

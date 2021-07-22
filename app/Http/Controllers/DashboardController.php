@@ -25,7 +25,8 @@ class DashboardController extends Controller
         return view('dashboard.index', [
             'page_title' => 'Dashboard',
             'breadcrumb_parent' => 'Dashboard',
-            'applications' => $applications
+            'applications' => $applications,
+            'groups' => $this->applicationRepository->getGroups()
         ]);
     }
 
@@ -54,6 +55,37 @@ class DashboardController extends Controller
 
             $response['success'] = true;
             $http_code = 200;
+        }
+
+        return response()->json($response, $http_code);
+    }
+
+    public function filter(Request $request): JsonResponse
+    {
+        $response = ['success' => false];
+        $http_code = 401;
+
+        if ($request->ajax()) {
+            $group = $request->get('group', null);
+
+            if ($group) {
+                $applications = $this->applicationRepository->findByGroup($group);
+            } else {
+                $applications = $this->applicationRepository->findApplicationsForMonitoring();
+            }
+
+            if ($applications) {
+                $html = view('dashboard.partials.row', ['applications' => $applications])->render();
+
+                $response = [
+                  'success' => true,
+                  'data' => [
+                      'html' => $html
+                  ]
+                ];
+
+                $http_code = 200;
+            }
         }
 
         return response()->json($response, $http_code);

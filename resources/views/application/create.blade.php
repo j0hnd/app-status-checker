@@ -1,5 +1,13 @@
 @extends('layouts.app')
 
+@section('custom-styles')
+    <style>
+        .select2-selection {
+            height: 38px !important;
+        }
+    </style>
+@endsection
+
 @section('content')
     <form id="applicationForm" autocomplete="off">
         <div class="row">

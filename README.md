@@ -17,6 +17,7 @@ In your .env file, supply the necessary details.
 ###Run these artisan commands:
 - php artisan migrate
 - php artisan ui bootstrap
+- php artisan db:seed --class=DefaultUserSeeder
 
 ### Run these NPM commands:
 - npm install
@@ -24,6 +25,9 @@ In your .env file, supply the necessary details.
 
 ### Pusher ###
 make sure you have a Pusher account and supply your credentials on .env file
+
+### Update .env ###
+1. change BROADCAST_DRIVER value to **pusher**
 
 ### Scheduling ###
 add **schedule:run** on cronjob and set the execution time every minute.

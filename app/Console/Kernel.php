@@ -44,9 +44,6 @@ class Kernel extends ConsoleKernel
      */
     protected function schedule(Schedule $schedule)
     {
-        // execute webhooks
-        $schedule->command('system-checks:run-webhooks')->everyMinute();
-
         // run http checks on each for monitor applications/apis
         $applications = $this->applicationRepository->findApplicationsForMonitoring();
 
@@ -88,6 +85,8 @@ class Kernel extends ConsoleKernel
             }
         }
 
+        // execute webhooks
+        $schedule->command('system-checks:run-webhooks')->everyMinute();
     }
 
     /**

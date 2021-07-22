@@ -1,6 +1,10 @@
 $(function () {
     $("#applicationDescription").summernote();
 
+    $('#group').select2({
+        tags: true
+    });
+
     $(document).on('change', '#monitored', function (event) {
         event.preventDefault();
 

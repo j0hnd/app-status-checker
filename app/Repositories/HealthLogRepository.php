@@ -38,6 +38,14 @@ class HealthLogRepository extends  BaseRepository implements HealthLogRepository
             ->get();
     }
 
+    public function getApplicationLogs($application_id): Collection
+    {
+        return HealthLog::select('id', 'application_id', 'extras', 'created_at')
+            ->where('application_id', $application_id)
+            ->orderBy('created_at', 'desc')
+            ->get();
+    }
+
     public function getRecentApplicationLog($application_id): Model
     {
         return HealthLog::select('id', 'application_id', 'http_code', 'extras', 'created_at')

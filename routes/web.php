@@ -26,6 +26,7 @@ Route::middleware('auth')->group(function () {
         Route::get('/', [App\Http\Controllers\DashboardController::class, 'index'])->name('dashboard.index');
         Route::get('/refresh', [App\Http\Controllers\DashboardController::class, 'manual_refresh'])->name('dashboard.manual_refresh');
         Route::get('/refresh/{application_code}', [App\Http\Controllers\DashboardController::class, 'manual_refresh'])->name('dashboard.single_app_refresh');
+        Route::get('/filter', [App\Http\Controllers\DashboardController::class, 'filter'])->name('dashboard.filter');
     });
 
     Route::prefix('application')->group(function () {
@@ -70,6 +71,7 @@ Route::middleware('auth')->group(function () {
     });
 
     Route::prefix('heartbeat')->group(function () {
+        Route::get('/logs',  [App\Http\Controllers\HeartbeatController::class, 'index'])->name('heartbeat.index');
         Route::get('/logs/{code}',  [App\Http\Controllers\HeartbeatController::class, 'logs'])->name('heartbeat.logs');
     });
 });

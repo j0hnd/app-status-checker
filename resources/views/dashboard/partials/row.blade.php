@@ -25,18 +25,15 @@
                 @endphp
 
                 <div class="col-md-4" id="app-{{ $application->application_code }}">
-                    <div class="callout {{ $callout }}">
-                        <div class="row">
-                            <div class="col-8">
-                                <h5><span class="{{ $font_color }} mr-2">{!! $icon !!}</span> {{ $application->name }}</h5>
-                                <p>Date/Time: {{ $logs->created_at->format('M d, Y H:i:s') }} ( {{ config('app.timezone') }} )</p>
-                            </div>
-                            <div class="col-4 text-right {{ $font_color }}">
-                                <h4><small style="color: #000; font-size: 11px;">HTTP Code: </small><strong>{{ $logs->http_code }}</strong></h4>
-                                <button class="btn btn-info btn-sm text-white toggle-app-refresh" title="Refresh" data-code="{{ $application->application_code }}"><i class="fa fa-retweet fa-1x" aria-hidden="true"></i></button>
-                            </div>
-                        </div>
-                    </div>
+                    @include('dashboard.partials._row', [
+                        'callout' => $callout,
+                        'font_color' => $font_color,
+                        'icon' => $icon,
+                        'application_name' => $application->name,
+                        'application_code' => $application->code,
+                        'created_at' => $logs->created_at->format('M d, Y H:i:s'),
+                        'http_code' => $logs->http_code
+                    ])
                 </div>
             @endforeach
         @endif

@@ -13,6 +13,9 @@ class Webhook extends Model
     const WEBHOOK_ACTIVE = 1;
     const WEBHOOK_NOT_ACTIVE = 0;
 
+    const SEND_ALL_HTTP_CODE = 1;
+    const NOT_SEND_ALL_HTTP_CODE = 0;
+
     use HasFactory, SoftDeletes;
 
     protected $fillable = [

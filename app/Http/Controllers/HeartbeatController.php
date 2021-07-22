@@ -26,15 +26,32 @@ class HeartbeatController extends Controller
         $this->applicationRepository = $applicationRepository;
     }
 
+    public function index(): View
+    {
+        $applications = $this->applicationRepository->findApplicationsForMonitoring();
+
+        return view('heartbeat.index', [
+            'page_title' => 'Logs',
+            'breadcrumb_parent' => 'Logs',
+            'applications' => $applications
+        ]);
+    }
+
     public function logs(Request $request, $code): JsonResponse
     {
         $response = ['success' => false];
         $http_code = 400;
 
         if ($request->ajax()) {
+            $all = $request->get('all', false);
+
             $application = $this->applicationRepository->findByApplicationCode($code);
 
-            $logs = $this->healthLogRepository->getRecentApplicationLogs($application->id);
+            if (! $all) {
+                $logs = $this->healthLogRepository->getRecentApplicationLogs($application->id);
+            } else {
+                $logs = $this->healthLogRepository->getApplicationLogs($application->id);
+            }
 
             if ($logs) {
                 $content = view('heartbeat.partials.logs', ['logs' => $logs])->render();

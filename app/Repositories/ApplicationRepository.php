@@ -63,6 +63,24 @@ class ApplicationRepository extends  BaseRepository implements ApplicationReposi
         return Application::where('application_code', $code)->firstOrFail();
     }
 
+    public function findByGroup($group): Collection
+    {
+        return Application::with('health_logs')
+            ->select('id', 'name', 'application_code', 'application_url', 'application_type', 'is_monitored', 'frequency')
+            ->where('group', $group)
+            ->where('is_monitored', 1)
+            ->get();
+    }
+
+    public function getGroups(): Collection
+    {
+        return Application::select('group')
+            ->whereNotNull('group')
+            ->groupBy('group')
+            ->orderBy('group', 'asc')
+            ->get();
+    }
+
     public function delete(Application $application)
     {
         return $application->delete();

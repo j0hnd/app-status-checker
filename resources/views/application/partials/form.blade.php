@@ -16,6 +16,17 @@
         </select>
     </div>
     <div class="form-group">
+        <label for="group">Group</label><small class="ml-2 font-italic">* Type group in the select dropdown if it does not exist on the list.</small>
+        <select class="form-control" name="group" id="group">
+            <option value="">Select Group</option>
+            @if(! is_null($groups))
+                @foreach($groups as $group)
+                <option value="{{ $group->group }}" {{ isset($application) ? $application->group == $group->group ? 'selected' : '' : '' }}>{{ $group->group }}</option>
+                @endforeach
+            @endif
+        </select>
+    </div>
+    <div class="form-group">
         <label for="applicationDescription">Description</label>
         <textarea class="form-control" name="description" id="applicationDescription">{{ isset($application) ? $application->description : old('description') }}</textarea>
     </div>
