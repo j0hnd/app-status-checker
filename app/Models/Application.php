@@ -100,7 +100,18 @@ class Application extends Model
                         $this->endpoint_detail->method = $endpoint_info['details']['method'];
                         $this->endpoint_detail->field_type = $endpoint_info['details']['field_type'];
                         $this->endpoint_detail->token_url = $endpoint_info['details']['token_url'];
-                        $this->endpoint_detail->authorization_type = $endpoint_info['details']['authorization_type'];
+
+                        if (! empty($endpoint_info['details']['authorization_type'])) {
+                            $this->endpoint_detail->authorization_type = $endpoint_info['details']['authorization_type'];
+                        } else {
+                            $this->endpoint_detail->authorization_type = null;
+                        }
+
+                        if (! empty($endpoint_info['details']['content_type'])) {
+                            $this->endpoint_detail->content_type = $endpoint_info['details']['content_type'];
+                        } else {
+                            $this->endpoint_detail->content_type = null;
+                        }
 
                         if ($endpoint_info['details']['authorization_type'] == "basic_auth") {
                             $this->endpoint_detail->username = $endpoint_info['details']['username'];
@@ -151,6 +162,7 @@ class Application extends Model
             DB::commit();
             $success = true;
         } catch (\Exception $exception) {
+            dump($exception->getMessage());
             DB::rollBack();
         }
 

@@ -142,6 +142,7 @@ class ApplicationController extends Controller
                     'method' => $request->get('method'),
                     'field_type' => $request->get('field_type'),
                     'token_url' => $request->get('token_url'),
+                    'content_type' => $request->get('content_type'),
                     'authorization_type' => $request->get('authorization_type'),
                     'app_key' => $request->get('app_key'),
                     'app_secret' => $request->get('app_secret'),

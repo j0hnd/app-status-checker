@@ -23,6 +23,12 @@ class Apache
             curl_setopt($ch, CURLOPT_NOBODY, true);
             curl_setopt($ch, CURLOPT_TIMEOUT,10);
 
+            if (isset($options['content_type'])) {
+                if (! is_null($options['content_type'])) {
+                    $headers[] = 'Content-Type: ' . $options['content_type'];
+                }
+            }
+
             // set POST fields
             if (! is_null($options)) {
                 if ($options['method'] == "post" and $options['field_type'] == "body" and (! empty($options['fields']) or ! is_null($options['fields']))) {
@@ -32,12 +38,12 @@ class Apache
 
                 // set the headers that we want our cURL client to use.
                 if (isset($options['bearer_token']) or ! is_null($options['bearer_token'])) {
-                    $headers = [
-                        'Authorization: Bearer ' . $options['bearer_token']
-                    ];
-
-                    curl_setopt($ch, CURLOPT_HTTPHEADER, $headers);
+                    $headers[] = 'Authorization: Bearer ' . $options['bearer_token'];
                 }
+            }
+
+            if (isset($headers)) {
+                curl_setopt($ch, CURLOPT_HTTPHEADER, $headers);
             }
 
             curl_setopt($ch, CURLOPT_RETURNTRANSFER,1);
@@ -49,6 +55,9 @@ class Apache
             curl_close($ch);
         } catch (\Exception $exception) {
             Log::error("Error on line number " . $exception->getLine() . " - " . $exception->getMessage());
+
+            $http_code = 503;
+            $output = $exception->getMessage();
         }
 
         return [

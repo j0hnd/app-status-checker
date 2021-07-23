@@ -73,6 +73,10 @@ class CheckStatusCommand extends Command
                 $options['method'] = $application->endpoint_detail->method;
                 $options['field_type'] = $application->endpoint_detail->field_type;
 
+                if (! empty($application->endpoint_detail->content_type)) {
+                    $options['content_type'] = $application->endpoint_detail->content_type;
+                }
+
                 $authorization_type = $application->endpoint_detail->authorization_type;
 
                 if (empty($application->endpoint_detail->current_token)) {

@@ -19,15 +19,15 @@
     <div class="form-group">
         <label>Content-Type</label>
         <select class="form-control" name="content_type">
-            <option>Select Content-Type</option>
-            <option value="application/json" {{ isset($application) ? !is_null($application->endpoint_detail) ? $application->endpoint_detail->field_type == "application/json" ? "selected" : "" : "" : "" }}>Application/JSON</option>
+            <option value="">Select Content-Type</option>
+            <option value="application/json" {{ isset($application) ? !is_null($application->endpoint_detail) ? $application->endpoint_detail->content_type == "application/json" ? "selected" : "" : "" : "" }}>Application/JSON</option>
         </select>
     </div>
 
     <div class="form-group">
         <label>Authorization</label>
         <select class="form-control" name="authorization_type" id="authorization_type">
-            <option>Select Authorization</option>
+            <option value="">Select Authorization</option>
             <option value="basic_auth" {{ isset($application) ? !is_null($application->endpoint_detail) ? $application->endpoint_detail->authorization_type == "basic_auth" ? "selected" : "" : "" : "" }}>Basic Auth</option>
             <option value="api_key_auth" {{ isset($application) ? !is_null($application->endpoint_detail) ? $application->endpoint_detail->authorization_type == "api_key_auth" ? "selected" : "" : "" : "" }}>API Key Auth</option>
             <option value="bearer_token" {{ isset($application) ? !is_null($application->endpoint_detail) ? $application->endpoint_detail->authorization_type == "bearer_token" ? "selected" : "" : "" : "" }}>Bearer Token</option>
