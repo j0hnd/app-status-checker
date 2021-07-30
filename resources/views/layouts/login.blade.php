@@ -10,17 +10,13 @@
 
     <title>{{ config('app.name', 'Laravel') }} | Login</title>
 
-    <!-- Fontawesome -->
-    <link href="{{ asset('css/plugins/all.min.css') }}" rel="stylesheet">
+    <link href="{{ asset('css/app.min.css') }}" rel="stylesheet">
 
     <!-- icheck bootstrap -->
     <link href="{{ asset('css/plugins/icheck-bootstrap.min.css') }}" rel="stylesheet">
 
     <!-- Ionicons -->
     <link rel="stylesheet" href="//code.ionicframework.com/ionicons/2.0.1/css/ionicons.min.css">
-
-    <!-- Styles -->
-    <link href="{{ asset('css/plugins/adminlte.min.css') }}" rel="stylesheet">
 
     <!-- Google Font: Source Sans Pro -->
     <link href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,400i,700" rel="stylesheet">
@@ -44,8 +40,7 @@
 <script src="{{ asset('js/plugins/additional-methods.js') }}"></script>
 <script src="{{ asset('js/plugins/adminlte.min.js') }}"></script>
 <script src="{{ asset('js/plugins/matchHeight.js') }}"></script>
-<script src="{{ asset('js/components/login.js') }}"></script>
-<script src="{{ asset('js/components/reset_password.js') }}"></script>
+<script src="{{ asset('js/components/login-component.min.js') }}"></script>
 @yield('custom-scripts')
 </body>
 </html>

@@ -100,6 +100,8 @@ class Application extends Model
                         $this->endpoint_detail->method = $endpoint_info['details']['method'];
                         $this->endpoint_detail->field_type = $endpoint_info['details']['field_type'];
                         $this->endpoint_detail->token_url = $endpoint_info['details']['token_url'];
+                        $this->endpoint_detail->login_as_token_url = $endpoint_info['details']['login_as_token_url'];
+                        $this->endpoint_detail->login_as = $endpoint_info['details']['login_as'];
 
                         if (! empty($endpoint_info['details']['authorization_type'])) {
                             $this->endpoint_detail->authorization_type = $endpoint_info['details']['authorization_type'];

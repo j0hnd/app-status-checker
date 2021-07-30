@@ -2,10 +2,10 @@
 
 namespace App\Console\Commands;
 
-use App\Events\AppStatusUpdated;
-use App\Models\EndpointDetail;
 use Illuminate\Console\Command;
 use Illuminate\Support\Facades\Http;
+use App\Events\AppStatusUpdated;
+use App\Models\EndpointDetail;
 use App\Repositories\ApplicationRepository;
 use App\SystemChecks\Apache;
 use App\Repositories\HealthLogRepository;
@@ -81,7 +81,7 @@ class CheckStatusCommand extends Command
 
                 if (empty($application->endpoint_detail->current_token)) {
                     if (! empty($application->endpoint_detail->token_url)) {
-                        $token = $this->request_token($application->endpoint_detail->token_url, $authorization_type, $this->get_request_token_credentials($application->endpoint_detail, $authorization_type));
+                        $token = $this->request_token($application->endpoint_detail->token_url, $this->get_request_token_credentials($application->endpoint_detail, $authorization_type), $authorization_type);
                         $options['bearer_token'] = $token;
 
                         // save token
@@ -90,13 +90,20 @@ class CheckStatusCommand extends Command
                     }
                 } else {
                     if ($this->is_token_expired($application->endpoint_detail->current_token)) {
-                        $token = $this->request_token($application->endpoint_detail->token_url, $authorization_type, $this->get_request_token_credentials($application->endpoint_detail, $authorization_type));
-                        $options['bearer_token'] = $token;
-
-                        // save token
-                        $application->endpoint_detail->current_token = $token;
-                        $application->endpoint_detail->save();
+                        $token =$this->request_token($application->endpoint_detail->token_url, $this->get_request_token_credentials($application->endpoint_detail, $authorization_type), $authorization_type);
+                    } else {
+                        $token = $application->endpoint_detail->current_token;
                     }
+
+                    if ($authorization_type == 'basic_auth' and ! empty($application->endpoint_detail->login_as) and ! empty($application->endpoint_detail->login_as_token_url)) {
+                        $token = $this->request_token($application->endpoint_detail->login_as_token_url, ['email' => $application->endpoint_detail->login_as], null, $token);
+                    }
+
+                    $options['bearer_token'] = $token;
+
+                    // save token
+                    $application->endpoint_detail->current_token = $token;
+                    $application->endpoint_detail->save();
 
                     $options['bearer_token'] = $application->endpoint_detail->current_token;
                 }
@@ -122,16 +129,20 @@ class CheckStatusCommand extends Command
         return 0;
     }
 
-    private function request_token($url, $authorization_type, $data)
+    private function request_token($url, $data, $authorization_type = null, $token = null)
     {
         if (is_null($data)) {
             return null;
         }
 
-        $response = Http::post($url, $data);
+        if (is_null($token)) {
+            $response = Http::post($url, $data);
+        } else {
+            $response = Http::withToken($token)->post($url, $data);
+        }
 
         if ($response->successful()) {
-            if ($authorization_type == 'basic_auth') {
+            if ($authorization_type == 'basic_auth' or is_null($authorization_type)) {
                 $token = (json_decode($response->body(), true))['data']['token'];
             }
 

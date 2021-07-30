@@ -15,10 +15,7 @@
     <link href="https://fonts.googleapis.com/css?family=Nunito" rel="stylesheet">
 
     <!-- Styles -->
-    <link href="{{ asset('css/app.css') }}" rel="stylesheet">
-
-    <!-- Fontawesome -->
-    <link href="{{ asset('css/plugins/all.min.css') }}" rel="stylesheet">
+    <link href="{{ asset('css/app.min.css') }}" rel="stylesheet">
 
     <!-- Overlay Scrollbars -->
     <link href="{{ asset('css/plugins/OverlayScrollbars.min.css') }}" rel="stylesheet">
@@ -26,7 +23,7 @@
     <!-- Toastr -->
     <link href="{{ asset('css/plugins/toastr.min.css') }}" rel="stylesheet">
 
-    <!-- SweetAlert -->
+    <!-- SweetAlert --> 
     <link href="{{ asset('css/plugins/sweetalert2.min.css') }}" rel="stylesheet">
 
     <!-- Summernote -->
@@ -94,7 +91,9 @@
                     <img src="/img/avatar/avatar04.png" class="img-circle elevation-2" alt="User Image">
                 </div>
                 <div class="info">
+                    @if(Auth::check())
                     <a href="javascript:void(0)" class="d-block">{{ ucwords(Auth::user()->firstname ) }} {{ ucwords(Auth::user()->lastname) }}</a>
+                    @endif
                 </div>
             </div>
 
@@ -226,9 +225,7 @@
 <script src="{{ asset('js/plugins/matchHeight.js') }}"></script>
 
 {{--components--}}
-<script src="{{ asset('js/components/common.js') }}"></script>
-<script src="{{ asset('js/components/application.js') }}"></script>
-<script src="{{ asset('js/components/dashboard.js') }}"></script>
+<script src="{{ asset('js/components/app-component.min.js') }}"></script>
 
 <!-- Custom Scripts -->
 @yield('custom-scripts')

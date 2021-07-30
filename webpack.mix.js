@@ -1,4 +1,5 @@
 const mix = require('laravel-mix');
+const del = require('del');
 
 /*
  |--------------------------------------------------------------------------
@@ -29,14 +30,19 @@ mix.js('resources/js/app.js', 'public/js')
     .copy('resources/plugins/select2/js/select2.full.min.js', 'public/js/plugins')
     .copy('resources/plugins/adminlte/js/adminlte.min.js', 'public/js/plugins')
     .copy('resources/plugins/match-height/matchHeight.js', 'public/js/plugins')
-    .copy('resources/js/components/common.js', 'public/js/components')
-    .copy('resources/js/components/application.js', 'public/js/components')
-    .copy('resources/js/components/login.js', 'public/js/components')
-    .copy('resources/js/components/reset_password.js', 'public/js/components')
-    .copy('resources/js/components/dashboard.js', 'public/js/components')
+
+    .combine([
+        'resources/js/components/common.js',
+        'resources/js/components/application.js',
+        'resources/js/components/dashboard.js'
+    ], 'public/js/components/app-component.js')
+
+    .combine([
+        'resources/js/components/login.js',
+        'resources/js/components/reset_password.js'
+    ], 'public/js/components/login-component.js')
 
     // css
-    .copy('resources/plugins/fontawesome-free/css/all.min.css', 'public/css/plugins')
     .copy('resources/plugins/overlayScrollbars/css/OverlayScrollbars.min.css', 'public/css/plugins')
     .copy('resources/plugins/toastr/toastr.min.css', 'public/css/plugins')
     .copy('resources/plugins/sweetalert2/sweetalert2.min.css', 'public/css/plugins')
@@ -46,10 +52,23 @@ mix.js('resources/js/app.js', 'public/js')
     .copy('resources/plugins/select2/css/select2.min.css', 'public/css/plugins')
     .copy('resources/plugins/select2-bootstrap4-theme/select2-bootstrap4.min.css', 'public/css/plugins')
     .copy('resources/plugins/icheck-bootstrap/icheck-bootstrap.min.css', 'public/css/plugins')
-    .copy('resources/plugins/adminlte/css/adminlte.min.css', 'public/css/plugins')
 
     // font
     .copy('resources/plugins/fontawesome-free/webfonts', 'public/css/webfonts')
     .copy('resources/plugins/summernote/font', 'public/css/plugins/font')
 
-    .sourceMaps();
+    .sourceMaps()
+    .minify('public/css/app.css')
+    .minify('public/js/app.js')
+    .minify('public/js/components/app-component.js')
+    .minify('public/js/components/login-component.js');
+
+if (mix.inProduction()) {
+    mix.version();
+
+    del('public/css/app.css');
+    del('public/js/app.js');
+    del('public/js/components/app-component.js');
+    del('public/js/components/login-component.js');
+}
+

@@ -17,6 +17,8 @@ class EndpointDetail extends Model
         'field_type',
         'current_token',
         'token_url',
+        'login_as',
+        'login_as_token_url',
         'content_type',
         'authorization_type',
         'app_key',

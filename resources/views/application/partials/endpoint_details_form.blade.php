@@ -45,6 +45,17 @@
         </div>
     </div>
 
+    <div class="basic-auth-wrapper {!! isset($application) ? !is_null($application->endpoint_detail) ? $application->endpoint_detail->authorization_type == "basic_auth" ? "" : "d-none" : "d-none" : "d-none" !!}">
+        <div class="form-group">
+            <label>Login as URL</label>
+            <input type="text" class="form-control" name="login_as_token_url" id="login_as_token_url" placeholder="Login as URL" value="{{ isset($application) ? ! is_null($application->endpoint_detail) ? $application->endpoint_detail->login_as_token_url : "" : "" }}">
+        </div>
+        <div class="form-group">
+            <label>Login as</label>
+            <input type="text" class="form-control" name="login_as" id="login_as" placeholder="Login as" value="{{ isset($application) ? ! is_null($application->endpoint_detail) ? $application->endpoint_detail->login_as : "" : "" }}">
+        </div>
+    </div>
+
     <div class="api-key-auth-wrapper {!! isset($application) ? !is_null($application->endpoint_detail) ? $application->endpoint_detail->authorization_type == "api_key_auth" ? "" : "d-none" : "d-none" : "d-none" !!}"">
         <div class="form-group">
             <label>APP Key</label>
