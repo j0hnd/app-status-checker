@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Requests\CommonRequest;
 use App\Http\Requests\WebhookRequest;
 use App\Models\Webhook;
 use App\Models\WebhookApplication;
@@ -198,7 +199,7 @@ class WebhookController extends Controller
         return response()->json($response, $http_code);
     }
 
-    public function delete(Request $request): JsonResponse
+    public function delete(CommonRequest $request): JsonResponse
     {
         $response = ['success' => false];
         $http_code = 400;
@@ -214,7 +215,7 @@ class WebhookController extends Controller
         return response()->json($response, $http_code);
     }
 
-    public function get_data(Request $request): JsonResponse
+    public function get_data(CommonRequest $request): JsonResponse
     {
         $data = $this->webhookRepository->all();
 

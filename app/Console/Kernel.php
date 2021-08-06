@@ -84,9 +84,6 @@ class Kernel extends ConsoleKernel
                 }
             }
         }
-
-        // execute webhooks
-        $schedule->command('system-checks:run-webhooks')->everyMinute();
     }
 
     /**

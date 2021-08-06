@@ -39,7 +39,7 @@
     <div class="form-group">
         <label for="applicationDescription">Monitoring Frequency</label>
         <select class="form-control" name="frequency" id="frequency" {{ isset($application) ? $application->is_monitored === 1 ? "" : "disabled" : "disabled" }}>
-            <option>Select Frequency</option>
+            <option value="">Select Frequency</option>
             <option value="everyMinute" {{ isset($application) ? $application->frequency == 'everyMinute' ? 'selected' : '' : '' }}>Every Minute</option>
             <option value="everyTwoMinutes" {{ isset($application) ? $application->frequency == 'everyTwoMinutes' ? 'selected' : '' : '' }}>Every 2mins.</option>
             <option value="everyThreeMinutes" {{ isset($application) ? $application->frequency == 'everyThreeMinutes' ? 'selected' : '' : '' }}>Every 3mins.</option>

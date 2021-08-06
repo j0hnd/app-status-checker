@@ -89,13 +89,13 @@ class Application extends Model
         try {
             DB::beginTransaction();
 
-            $endpoint_info = self::get_endpoint_info();
-
             parent::save();
 
-            if (! empty($endpoint_info)) {
+            if (! empty($endpoint_info) and $this->application_type == "api") {
+                $endpoint_info = self::get_endpoint_info();
+
                 // save endpoint details
-                if ($endpoint_info['details']['method'] != "Select Method" or ! is_null($endpoint_info['details']['token_url'])) {
+                if (! empty($endpoint_info['details']['method']) or ! is_null($endpoint_info['details']['token_url'])) {
                     if ($this->endpoint_detail) {
                         $this->endpoint_detail->method = $endpoint_info['details']['method'];
                         $this->endpoint_detail->field_type = $endpoint_info['details']['field_type'];
@@ -164,8 +164,9 @@ class Application extends Model
             DB::commit();
             $success = true;
         } catch (\Exception $exception) {
-            dump($exception->getMessage());
             DB::rollBack();
+
+            throw new \Exception($exception->getMessage());
         }
 
         return $success;

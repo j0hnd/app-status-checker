@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Requests\CommonRequest;
 use App\Jobs\ManualPingJob;
 use App\Repositories\ApplicationRepository;
 use Illuminate\Http\JsonResponse;
@@ -39,7 +40,7 @@ class DashboardController extends Controller
             ]);
     }
 
-    public function manual_refresh(Request $request, $application_code = null): JsonResponse
+    public function manual_refresh(CommonRequest $request, $application_code = null): JsonResponse
     {
         $response = ['success' => false];
         $http_code = 401;
@@ -60,7 +61,7 @@ class DashboardController extends Controller
         return response()->json($response, $http_code);
     }
 
-    public function filter(Request $request): JsonResponse
+    public function filter(CommonRequest $request): JsonResponse
     {
         $response = ['success' => false];
         $http_code = 401;

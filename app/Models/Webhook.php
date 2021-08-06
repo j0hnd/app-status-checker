@@ -22,7 +22,8 @@ class Webhook extends Model
         'webhook_code',
         'name',
         'url',
-        'is_active'
+        'is_active',
+        'send_all_codes'
     ];
 
     protected $dates = [

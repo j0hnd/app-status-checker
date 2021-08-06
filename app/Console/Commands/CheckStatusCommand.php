@@ -2,6 +2,8 @@
 
 namespace App\Console\Commands;
 
+use App\Models\HealthLog;
+use App\SystemChecks\Webhook;
 use Illuminate\Console\Command;
 use Illuminate\Support\Facades\Http;
 use App\Events\AppStatusUpdated;
@@ -9,6 +11,7 @@ use App\Models\EndpointDetail;
 use App\Repositories\ApplicationRepository;
 use App\SystemChecks\Apache;
 use App\Repositories\HealthLogRepository;
+use Illuminate\Support\Facades\Log;
 use Lcobucci\JWT\Encoding\JoseEncoder;
 use Lcobucci\JWT\Token\Parser;
 
@@ -35,6 +38,8 @@ class CheckStatusCommand extends Command
 
     protected $apache;
 
+    protected $webhook;
+
 
     /**
      * Create a new command instance.
@@ -44,7 +49,8 @@ class CheckStatusCommand extends Command
     public function __construct(
         ApplicationRepository $applicationRepository,
         HealthLogRepository $healthLogRepository,
-        Apache $apache
+        Apache $apache,
+        Webhook $webhook
     )
     {
         parent::__construct();
@@ -52,6 +58,7 @@ class CheckStatusCommand extends Command
         $this->applicationRepository = $applicationRepository;
         $this->healthLogRepository = $healthLogRepository;
         $this->apache = $apache;
+        $this->webhook = $webhook;
     }
 
     /**
@@ -118,15 +125,52 @@ class CheckStatusCommand extends Command
 
         $apache_response = $this->apache->resolve($application_url, $options);
 
-        $this->healthLogRepository->create([
-            'application_id' => $application_id,
-            'http_code' => $apache_response['http_code'],
-            'extras' => $apache_response['extras']
-        ]);
+        $health_log = new HealthLog();
+        $health_log->application_id = $application_id;
+        $health_log->http_code = $apache_response['http_code'];
+        $health_log->extras = $apache_response['extras'];
 
-        event(new AppStatusUpdated($application->application_code));
+        if ($health_log->save()) {
+            event(new AppStatusUpdated($application->application_code));
+
+            $this->send_log($application_id);
+        }
+
 
         return 0;
+    }
+
+    private function send_log($application_id)
+    {
+        $application = $this->applicationRepository->find($application_id);
+
+        if ($application->webhooks) {
+            foreach ($application->webhooks as $webhook) {
+                if ($application->is_monitored and $webhook->webhooks->is_active) {
+                    $log = $this->healthLogRepository->getRecentApplicationLog($application->id);
+
+                    if ($log) {
+                        if ($webhook->webhooks->send_all_codes == 0 and $log->http_code < 300) {
+                            continue;
+                        }
+
+                        $content = "App Name: {$application->name}\n";
+                        $content .= "HTTP Status: {$log->http_code}\n";
+                        $content .= "Timestamp: {$log->created_at->format('M d, Y H:i:s')} (".config('app.timezone').")";
+
+                        $response = $this->webhook->send($webhook->webhooks->url, [
+                            'text' => $content
+                        ]);
+
+                        if ($response->getStatusCode() != 200) {
+                            Log::alert("Unable to send log on {$webhook->webhooks->name}|response: ".serialize($response));
+                        }
+
+                        Log::info("Logs of {$application->name} was sent to {$webhook->webhooks->name} at {$log->created_at->format('M d, Y H:i:s')}");
+                    }
+                }
+            }
+        }
     }
 
     private function request_token($url, $data, $authorization_type = null, $token = null)

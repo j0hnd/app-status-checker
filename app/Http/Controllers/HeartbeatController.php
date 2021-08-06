@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Requests\CommonRequest;
 use App\Repositories\ApplicationRepository;
 use App\Repositories\HealthLogRepository;
 use Illuminate\Http\JsonResponse;
@@ -37,7 +38,7 @@ class HeartbeatController extends Controller
         ]);
     }
 
-    public function logs(Request $request, $code): JsonResponse
+    public function logs(CommonRequest $request, $code): JsonResponse
     {
         $response = ['success' => false];
         $http_code = 400;

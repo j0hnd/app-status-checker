@@ -13,9 +13,9 @@
     <!-- Fonts -->
     <link rel="dns-prefetch" href="//fonts.gstatic.com">
     <link href="https://fonts.googleapis.com/css?family=Nunito" rel="stylesheet">
-
     <!-- Styles -->
     <link href="{{ asset('css/app.min.css') }}" rel="stylesheet">
+
 
     <!-- Overlay Scrollbars -->
     <link href="{{ asset('css/plugins/OverlayScrollbars.min.css') }}" rel="stylesheet">
@@ -23,7 +23,7 @@
     <!-- Toastr -->
     <link href="{{ asset('css/plugins/toastr.min.css') }}" rel="stylesheet">
 
-    <!-- SweetAlert --> 
+    <!-- SweetAlert -->
     <link href="{{ asset('css/plugins/sweetalert2.min.css') }}" rel="stylesheet">
 
     <!-- Summernote -->

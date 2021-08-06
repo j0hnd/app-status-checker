@@ -6,7 +6,7 @@ use App\Http\Traits\SanitizeRequest;
 use Illuminate\Foundation\Http\FormRequest;
 use Auth;
 
-class ApplicationRequest extends FormRequest
+class CommonRequest extends FormRequest
 {
     use SanitizeRequest;
 
@@ -28,9 +28,7 @@ class ApplicationRequest extends FormRequest
     public function rules()
     {
         return [
-            'name' => 'required',
-            'application_url' => 'required|url',
-            'application_type' => 'required'
+            //
         ];
     }
 }

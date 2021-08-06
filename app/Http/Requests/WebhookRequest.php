@@ -2,10 +2,14 @@
 
 namespace App\Http\Requests;
 
+use App\Http\Traits\SanitizeRequest;
 use Illuminate\Foundation\Http\FormRequest;
+use Auth;
 
 class WebhookRequest extends FormRequest
 {
+    use SanitizeRequest;
+
     /**
      * Determine if the user is authorized to make this request.
      *
@@ -13,7 +17,7 @@ class WebhookRequest extends FormRequest
      */
     public function authorize()
     {
-        return true;
+        return Auth::check();
     }
 
     /**

@@ -3,10 +3,12 @@
 namespace App\Http\Controllers\Auth;
 
 use App\Http\Controllers\Controller;
+use App\Http\Requests\CommonRequest;
 use App\Mail\ResetPasswordMail;
 use App\Providers\RouteServiceProvider;
 use App\Repositories\UserRepository;
 use Illuminate\Foundation\Auth\AuthenticatesUsers;
+use Illuminate\Foundation\Auth\ThrottlesLogins;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -30,6 +32,14 @@ class LoginController extends Controller
     */
 
     use AuthenticatesUsers;
+
+    use ThrottlesLogins;
+
+
+    protected $maxAttempts = 3;
+
+    protected $decayMinutes = 1;
+
 
     /**
      * Where to redirect users after login.
@@ -72,8 +82,17 @@ class LoginController extends Controller
 
         $remember_me = $request->has('remember_me') ? true : false;
 
+
+        if (method_exists($this, 'hasTooManyLoginAttempts') and $this->hasTooManyLoginAttempts($request)) {
+            $this->fireLockoutEvent($request);
+
+            return $this->sendLoginResponse($request);
+        }
+
         if (Auth::attempt($credentials, $remember_me)) {
             $request->session()->regenerate();
+
+            $this->clearLoginAttempts($request);
 
             return response()->json([
                 'success' => true,
@@ -81,7 +100,9 @@ class LoginController extends Controller
             ], 200);
         }
 
-        return response()->json(['success' => false], 401);
+        $this->incrementLoginAttempts($request);
+
+        return $this->sendFailedLoginResponse($request);
     }
 
     public function forgot_password(Request $request): JsonResponse

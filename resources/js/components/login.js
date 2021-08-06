@@ -7,17 +7,31 @@ $(function () {
                 data: $("#loginForm").serialize(),
                 dataType: "json",
                 success: function (response) {
-                    if (response.success) {
-                        window.location.href = response.redirect;
-                    } else {
+                    if (response == undefined) {
                         $('#login-error').removeClass('d-none');
 
                         setTimeout(function () {
                             $('#login-error').addClass('d-none');
                         }, 5000);
+                    } else {
+                        if (response.success) {
+                            window.location.href = response.redirect;
+                        } else {
+                            $('#login-error').removeClass('d-none');
+
+                            setTimeout(function () {
+                                $('#login-error').addClass('d-none');
+                            }, 5000);
+                        }
                     }
                 },
                 error: function (err) {
+                    if (err.responseJSON.message == "The given data was invalid.") {
+                        $('#login-error-message').text("Invalid username and/or password");
+                    } else {
+                        $('#login-error-message').text(err.responseJSON.message);
+                    }
+
                     $('#login-error').removeClass('d-none');
 
                     setTimeout(function () {

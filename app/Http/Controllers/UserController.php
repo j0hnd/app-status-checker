@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Requests\CommonRequest;
 use App\Http\Requests\UserRequest;
 use App\Mail\ChangedPasswordMail;
 use App\Mail\ResetPasswordMail;
@@ -52,14 +53,18 @@ class UserController extends Controller
                 if ($request->isMethod('POST')) {
                     $input = $request->only(['firstname', 'lastname', 'email', 'password']);
 
+                    $temporary_password = Str::random(8);
+
                     $user = $this->userRepository->create([
                         'firstname' => $input['firstname'],
                         'lastname' => $input['lastname'],
                         'email' => $input['email'],
-                        'password' => Hash::make(Str::random(8))
+                        'password' => Hash::make($temporary_password)
                     ]);
 
                     if ($user) {
+                        Mail::to($user->email)->send(new ResetPasswordMail($user, $temporary_password));
+
                         $response['success'] = true;
                         $http_code = 200;
                     }
@@ -120,7 +125,7 @@ class UserController extends Controller
         return response()->json($response, $http_code);
     }
 
-    public function delete(Request $request): JsonResponse
+    public function delete(CommonRequest $request): JsonResponse
     {
         $response = ['success' => false];
         $http_code = 400;
@@ -142,11 +147,10 @@ class UserController extends Controller
         return response()->json($response, $http_code);
     }
 
-    public function reset_password(Request $request, $code): JsonResponse
+    public function reset_password(CommonRequest $request, $code): JsonResponse
     {
         $response = ['success' => false];
         $http_code = 400;
-        $code = $request->all();
 
         try {
             if ($request->ajax()) {
@@ -182,7 +186,7 @@ class UserController extends Controller
         ]);
     }
 
-    public function save_change_password(Request $request): JsonResponse
+    public function save_change_password(CommonRequest $request): JsonResponse
     {
         $response = ['success' => false];
         $http_code = 400;
@@ -223,7 +227,7 @@ class UserController extends Controller
         return response()->json($response, $http_code);
     }
 
-    public function get_data(Request $request): JsonResponse
+    public function get_data(CommonRequest $request): JsonResponse
     {
         $data = $this->userRepository->all();
 

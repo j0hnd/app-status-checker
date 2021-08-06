@@ -1,7 +1,7 @@
 <div class="form-group">
     <label>Method</label>
     <select class="form-control" name="method">
-        <option>Select Method</option>
+        <option value="">Select Method</option>
         <option value="get" {{ isset($application) ? !is_null($application->endpoint_detail) ? $application->endpoint_detail->method == "get" ? "selected" : "" : "" : "" }}>GET</option>
         <option value="post" {{ isset($application) ? !is_null($application->endpoint_detail) ? $application->endpoint_detail->method == "post" ? "selected" : "" : "" : "" }}>POST</option>
         <option value="put" {{ isset($application) ? !is_null($application->endpoint_detail) ? $application->endpoint_detail->method == "put" ? "selected" : "" : "" : "" }}>PUT</option>

@@ -50,7 +50,7 @@ class HealthLogRepository extends  BaseRepository implements HealthLogRepository
     {
         return HealthLog::select('id', 'application_id', 'http_code', 'extras', 'created_at')
             ->where('application_id', $application_id)
-            ->orderBy('created_at', 'desc')
+            ->orderBy('id', 'desc')
             ->first();
     }
 }

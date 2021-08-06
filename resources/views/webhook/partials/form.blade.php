@@ -16,7 +16,7 @@
     <div class="form-group">
         <label for="webhookUrl">Applications</label>
         <select class="select2" name="application_ids[]" id="applications" multiple="multiple" data-placeholder="Select an Application" style="width: 100%">
-            <option>Select Application</option>
+            <option value="">Select Application</option>
             @if($applications)
                 @foreach($applications as $application)
                 <option value="{{$application->application_code}}" {{ in_array($application->application_code, $selected_applications) === true ? "selected" : "" }}>{{$application->name}}</option>

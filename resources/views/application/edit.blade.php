@@ -51,7 +51,7 @@
                                 <label>Field Type</label>
                                 <div class="col-5">
                                     <select class="form-control ml-sm-2 mr-sm-2" name="field_type" style="width: 100%;">
-                                        <option>Select Type</option>
+                                        <option value="">Select Type</option>
                                         <option value="param" {{ isset($application) ? ! is_null($application->endpoint_detail) ? $application->endpoint_detail->field_type == "param" ? "selected" : "" : "" : "" }}>Param</option>
                                         <option value="body" {{ isset($application) ? ! is_null($application->endpoint_detail) ? $application->endpoint_detail->field_type == "body" ? "selected" : "" : "" : "" }}>Body</option>
                                     </select>

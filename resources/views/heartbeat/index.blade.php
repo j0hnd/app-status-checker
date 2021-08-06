@@ -25,7 +25,7 @@
                     <form class="form-inline">
                         <div class="form-group" style="width: 40%">
                             <select name="application" id="applications" data-placeholder="Select an Application" style="width: 95%;">
-                                <option>Select an Application</option>
+                                <option value="">Select an Application</option>
                                 @if($applications)
                                     @foreach($applications as $application)
                                         <option value="{{$application->application_code}}">{{$application->name}}</option>

@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Http\Requests\ApplicationRequest;
+use App\Http\Requests\CommonRequest;
 use App\Models\Application;
 use App\Repositories\ApplicationRepository;
 use Illuminate\Http\JsonResponse;
@@ -75,7 +76,7 @@ class ApplicationController extends Controller
                 Application::set_endpoint_info($endpoint_info);
 
                 $application = new Application;
-                $application->name = $input['name'];
+                $application->name = substr($input['name'], 0, 50);
                 $application->description = $input['description'];
                 $application->application_url = $input['application_url'];
                 $application->application_type = $input['application_type'];
@@ -131,7 +132,7 @@ class ApplicationController extends Controller
                 $frequency = $request->get('frequency');
             }
 
-            $application->name = $request->get('name');
+            $application->name = substr($request->get('name'), 0, 50);
             $application->application_url = $request->get('application_url');
             $application->application_type = $request->get('application_type');
             $application->description = $request->get('description');
@@ -167,7 +168,7 @@ class ApplicationController extends Controller
         return response()->json($response, $http_code);
     }
 
-    public function delete(Request $request): JsonResponse
+    public function delete(CommonRequest $request): JsonResponse
     {
         $response = ['success' => false];
         $http_code = 400;
@@ -183,7 +184,7 @@ class ApplicationController extends Controller
         return response()->json($response, $http_code);
     }
 
-    public function get_data(Request $request): JsonResponse
+    public function get_data(CommonRequest $request): JsonResponse
     {
         $data = $this->applicationRepository->all();
 
@@ -213,7 +214,7 @@ class ApplicationController extends Controller
         ], 200);
     }
 
-    public function row_update(Request $request): JsonResponse
+    public function row_update(CommonRequest $request): JsonResponse
     {
         $response = ['success' => false];
         $http_code = 401;
