@@ -156,7 +156,7 @@ class UserController extends Controller
             if ($request->ajax()) {
                 $user = $this->userRepository->findByUserCode($code);
 
-                if ($user) {
+                if (!empty($user)) {
                     $temporary_password = Str::random(10);
                     $hashed_temporary_password = Hash::make($temporary_password);
 

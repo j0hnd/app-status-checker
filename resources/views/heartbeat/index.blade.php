@@ -36,7 +36,16 @@
                         <button class="btn btn-primary" id="toggle-application-log-filter"><i class="fa fa-filter" aria-hidden="true"></i></button>
                     </form>
 
-                    <div id="logs-wrapper" class="mt-5"></div>
+                    <div id="logs-wrapper" class="mt-5">
+                        <table id="logs" class="table">
+                            <thead>
+                                <tr>
+                                    <th>Timestamp</th>
+                                    <th>Logs</th>
+                                </tr>
+                            </thead>
+                        </table>
+                    </div>
                 </div>
             </div>
         </div>
@@ -52,26 +61,33 @@
                 event.preventDefault();
                 var el = $('#applications');
 
-                $.ajax({
-                    url: "{{ url('heartbeat/logs') }}/" + el.val(),
-                    data: {
-                        all: true
+                if (! el.val()) {
+                    toastr.warning("Please select application to view logs");
+                    return;
+                }
+
+                if ($.fn.DataTable.isDataTable('#logs')) {
+                    $('#logs').dataTable().fnClearTable();
+                    $('#logs').dataTable().fnDestroy();
+                }
+
+                var table = $("#logs").DataTable({
+                    lengthChange: false,
+                    sFilter: true,
+                    processing: true,
+                    serverSide: true,
+                    responsive: true,
+                    ajax: {
+                        url: "{{ url('/heartbeat/logs') }}/" + el.val()
                     },
-                    dataType: "json",
-                    beforeSend: function () {
-                        $('#logs-wrapper').html("<div class='text-center'><i class='fa fa-spinner fa-spin fa-2x fa-fw'></i><span class='ml-2'>Please wait...</span></div>");
-                    },
-                    success: function (response) {
-                        if (response.success) {
-                            $('#logs-wrapper').html(response.data.content);
-                        } else {
-                            toastr.warning("No logs found on the selected application");
-                        }
-                    },
-                    error: function () {
-                        $('#logs-wrapper').html("");
-                        toastr.error("Oops! Something went wrong...");
-                    }
+                    columns: [
+                        { data: "created_at", name: "created_at" },
+                        { data: "extras", name: "extras"}
+                    ],
+                    columnDefs: [
+                        { width: 250, targets: 0 }
+                    ],
+                    fixedColumns: true
                 });
             });
         });

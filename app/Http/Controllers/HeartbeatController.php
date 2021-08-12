@@ -8,6 +8,7 @@ use App\Repositories\HealthLogRepository;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Illuminate\View\View;
+use DataTables;
 
 
 class HeartbeatController extends Controller
@@ -44,27 +45,23 @@ class HeartbeatController extends Controller
         $http_code = 400;
 
         if ($request->ajax()) {
-            $all = $request->get('all', false);
-
             $application = $this->applicationRepository->findByApplicationCode($code);
 
-            if (! $all) {
-                $logs = $this->healthLogRepository->getRecentApplicationLogs($application->id);
-            } else {
+            if ($application) {
                 $logs = $this->healthLogRepository->getApplicationLogs($application->id);
-            }
 
-            if ($logs) {
-                $content = view('heartbeat.partials.logs', ['logs' => $logs])->render();
-
-                $response = [
-                    'success' => true,
-                    'data' => [
-                        'content' => $content
-                    ]
-                ];
-
-                $http_code = 200;
+                if ($logs) {
+                    return Datatables::of($logs)
+                        ->addIndexColumn()
+                        ->addColumn('created_at', function ($row) {
+                            return date('m d, Y H:i:s', strtotime($row->created_at));
+                        })
+                        ->addColumn('extras', function ($row) {
+                            return "<div style='white-space: normal; width: 1000px'>".unserialize($row->extras)."</div>";
+                        })
+                        ->escapeColumns([])
+                        ->make(true);
+                }
             }
         }
 

@@ -14,6 +14,9 @@ class User extends Authenticatable
 {
     use HasFactory, Notifiable, SoftDeletes;
 
+    const USER_ACCOUNT_LOCKED = true;
+    const USER_ACCOUNT_NOT_LOCKED = false;
+
     /**
      * The attributes that are mass assignable.
      *
@@ -24,6 +27,7 @@ class User extends Authenticatable
         'lastname',
         'email',
         'password',
+        'is_locked'
     ];
 
     /**
@@ -38,6 +42,8 @@ class User extends Authenticatable
         'created_at',
         'updated_at'
     ];
+
+    protected $guarded = ['user_code'];
 
 
     protected static function boot()

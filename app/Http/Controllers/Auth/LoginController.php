@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Auth;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\CommonRequest;
 use App\Mail\ResetPasswordMail;
+use App\Models\User;
 use App\Providers\RouteServiceProvider;
 use App\Repositories\UserRepository;
 use Illuminate\Foundation\Auth\AuthenticatesUsers;
@@ -77,16 +78,24 @@ class LoginController extends Controller
     {
         $credentials = $request->validate([
             'email' => ['required', 'email'],
-            'password' => ['required'],
+            'password' => ['required']
         ]);
 
         $remember_me = $request->has('remember_me') ? true : false;
 
 
         if (method_exists($this, 'hasTooManyLoginAttempts') and $this->hasTooManyLoginAttempts($request)) {
+            $user = $this->userRepository->findByEmail($credentials['email']);
+
+            // lock user account
+            $user->is_locked = User::USER_ACCOUNT_LOCKED;
+            $user->save();
+
             $this->fireLockoutEvent($request);
 
             return $this->sendLoginResponse($request);
+        } else {
+            $credentials['is_locked'] = User::USER_ACCOUNT_NOT_LOCKED;
         }
 
         if (Auth::attempt($credentials, $remember_me)) {
@@ -100,7 +109,18 @@ class LoginController extends Controller
             ], 200);
         }
 
+        // increment login attempt
         $this->incrementLoginAttempts($request);
+
+        $user = $this->userRepository->findByEmail($credentials['email']);
+
+        // check if account is locked
+        if ($user->is_locked == 1) {
+            return response()->json([
+                'success' => false,
+                'message' => "Account is locked!"
+            ], 503);
+        }
 
         return $this->sendFailedLoginResponse($request);
     }

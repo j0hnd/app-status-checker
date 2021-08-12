@@ -1,6 +1,6 @@
 <html lang="en">
 <head>
-    <title>App Status Checker - Reset Password</title>
+    <title>IXU - Reset Password</title>
     <style>
         .wrapper p {
             font-size: 14px;
