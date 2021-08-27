@@ -2,25 +2,7 @@
 
 @section('content')
     <form id="userForm" autocomplete="off">
-        <div class="row">
-            <div class="col-md-7">
-                <!-- general form elements -->
-                <div class="card card-primary">
-                    <div class="card-header">
-                        <h3 class="card-title">User Details</h3>
-                    </div>
-
-                    @include('user.partials.form', ['user' => $user])
-                </div>
-            </div>
-        </div>
-
-        <div class="row">
-            <div class="col-md-12">
-                <button type="button" class="btn btn-link toggle-cancel-button" data-url="{{ route('user.index') }}">Cancel</button>
-                <button type="submit" class="btn btn-primary" id="toggle-update-user">Update</button>
-            </div>
-        </div>
+        @include('user.partials.edit_form', ['user' => $user])
     </form>
 @endsection
 
@@ -37,15 +19,24 @@
                         success: function (response) {
                             if (response.success) {
                                 toastr.success("A user has been updated");
-                                $("#userForm")[0].reset();
+                                $("#userForm").html(response.data.html);
                             } else {
                                 toastr.error("Oops! Something went wrong.")
                             }
                         },
                         error: function (err) {
+                            var error_message = "";
+                            $.each(err.responseJSON.errors, function (k, v) {
+                                if (k == 'email') {
+                                    error_message += "The email address is already taken";
+                                } else {
+                                    error_message += v[0];
+                                }
+                            });
+
                             Swal.fire({
                                 icon: 'error',
-                                title: err.responseJSON.message
+                                title: error_message
                             });
                         }
                     });

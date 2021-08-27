@@ -43,9 +43,18 @@
                             }
                         },
                         error: function (err) {
+                            var error_message = "";
+                            $.each(err.responseJSON.errors, function (k, v) {
+                                if (k == 'email') {
+                                    error_message += "The email address is already taken";
+                                } else {
+                                    error_message += v[0];
+                                }
+                            });
+
                             Swal.fire({
                                 icon: 'error',
-                                title: err.responseJSON.message
+                                title: error_message
                             });
                         }
                     });

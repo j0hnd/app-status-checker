@@ -15,7 +15,7 @@
     </div>
     <div class="form-group">
         <label for="webhookUrl">Applications</label>
-        <select class="select2" name="application_ids[]" id="applications" multiple="multiple" data-placeholder="Select an Application" style="width: 100%">
+        <select class="select2 width-100" name="application_ids[]" id="applications" multiple="multiple" data-placeholder="Select an Application">
             <option value="">Select Application</option>
             @if($applications)
                 @foreach($applications as $application)

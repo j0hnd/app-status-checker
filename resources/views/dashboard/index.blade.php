@@ -22,13 +22,13 @@
         <div class="card card-primary">
             <div class="card-header">
                 <div class="row">
-                    <div class="col-10" style="text-align: left">
+                    <div class="col-10 text-left">
                         <a href="javascript:void(0)" class="btn btn-lg text-white">
                             <h3 class="card-title">Pings</h3>
                         </a>
                     </div>
 
-                    <div class="col-2 mt-2" style="text-align: right">
+                    <div class="col-2 mt-2 text-right">
                         <a href="javascript:void(0)" class="mr-2" id="toggle-refresh-logs" title="Refresh Logs"><i class="fa fa-retweet fa-1x" aria-hidden="true"></i></a>
                         <a href="{{ route('dashboard.logs') }}" target="_blank" title="Open logs on separate window"><i class="fa fa-share fa-1x" aria-hidden="true"></i></a>
                     </div>
@@ -39,8 +39,8 @@
                 <div class="row mb-5">
                     <div class="col-md-12">
                         <form class="form-inline">
-                            <div class="form-group" style="width: 40%">
-                                <select class="form-control" id="filter-group" data-placeholder="Filter by group" style="width: 95%;">
+                            <div class="form-group width-40">
+                                <select class="form-control width-95" id="filter-group" data-placeholder="Filter by group">
                                     <option value="">Select a Group</option>
                                     @if(! is_null($groups))
                                         @foreach($groups as $group)
@@ -54,7 +54,10 @@
                     </div>
                 </div>
                 <div class="row" id="application-status-wrapper">
-                    @include('dashboard.partials.row', ['applications' => $applications])
+                    @include('dashboard.partials.row', [
+                        'applications' => $applications,
+                        'is_public' => false
+                    ])
                 </div>
             </div>
         </div>

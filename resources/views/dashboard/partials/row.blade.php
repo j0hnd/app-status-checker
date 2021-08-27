@@ -32,7 +32,8 @@
                         'application_name' => $application->name,
                         'application_code' => $application->code,
                         'created_at' => $logs->created_at->format('M d, Y H:i:s'),
-                        'http_code' => $logs->http_code
+                        'http_code' => $logs->http_code,
+                        'is_public' => $is_public
                     ])
                 </div>
             @endforeach

@@ -113,7 +113,11 @@ class UserController extends Controller
                     $user->email = $request->get('email');
 
                     if ($user->save()) {
+                        $user = $this->userRepository->findByUserCode($code);
+
                         $response['success'] = true;
+                        $response['data']['html'] = view('user.partials.edit_form', ['user' => $user])->render();
+
                         $http_code = 200;
                     }
                 }

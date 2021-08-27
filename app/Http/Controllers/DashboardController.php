@@ -76,7 +76,10 @@ class DashboardController extends Controller
             }
 
             if ($applications) {
-                $html = view('dashboard.partials.row', ['applications' => $applications])->render();
+                $html = view('dashboard.partials.row', [
+                    'applications' => $applications,
+                    'is_public' => false
+                ])->render();
 
                 $response = [
                   'success' => true,

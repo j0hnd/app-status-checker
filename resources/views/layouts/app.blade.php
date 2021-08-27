@@ -78,8 +78,7 @@
         <a href="javascript:void(0)" class="brand-link">
             <img src="/img/logo-small.png"
                  alt="IXU"
-                 class="brand-image img-circle elevation-3"
-                 style="opacity: .8">
+                 class="brand-image img-circle elevation-3">
             <span class="brand-text font-weight-light"><strong>I</strong>XU</span>
         </a>
 

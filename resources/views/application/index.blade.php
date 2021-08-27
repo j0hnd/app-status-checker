@@ -40,7 +40,7 @@
                     </button>
                 </div>
 
-                <div class="modal-body p-4" style="">
+                <div class="modal-body p-4">
                     <p>Modal body text goes here.</p>
                 </div>
             </div>
@@ -91,10 +91,11 @@
                 var data = table.row($(this).parents('tr')).data();
 
                 $.ajax({
-                    url: "{{ url('/heartbeat/logs') }}/" + data.application_code,
+                    url: "{{ url('/heartbeat/recent/logs') }}/" + data.application_code,
                     type: 'get',
                     dataType: 'json',
                     success: function (response) {
+                        console.log(response);
                         if (response.success) {
                             $('.modal-title').html("Logs - " + data.name);
                             $('.modal-body').html(response.data.content);

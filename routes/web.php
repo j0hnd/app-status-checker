@@ -72,6 +72,7 @@ Route::middleware('auth')->group(function () {
 
     Route::prefix('heartbeat')->group(function () {
         Route::get('/logs',  [App\Http\Controllers\HeartbeatController::class, 'index'])->name('heartbeat.index');
+        Route::get('/recent/logs/{code}',  [App\Http\Controllers\HeartbeatController::class, 'recent_logs'])->name('heartbeat.recent.logs');
         Route::get('/logs/{code}',  [App\Http\Controllers\HeartbeatController::class, 'logs'])->name('heartbeat.logs');
     });
 });

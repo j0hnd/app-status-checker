@@ -23,8 +23,8 @@
 
                 <div class="card-body">
                     <form class="form-inline">
-                        <div class="form-group" style="width: 40%">
-                            <select name="application" id="applications" data-placeholder="Select an Application" style="width: 95%;">
+                        <div class="form-group width-40">
+                            <select name="application" class="width-95" id="applications" data-placeholder="Select an Application">
                                 <option value="">Select an Application</option>
                                 @if($applications)
                                     @foreach($applications as $application)

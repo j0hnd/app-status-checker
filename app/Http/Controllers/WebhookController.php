@@ -191,7 +191,33 @@ class WebhookController extends Controller
                     }
                 }
 
+                $webhook = $this->webhookRepository->findByWebhookCode($code);
+
+                $applications = $this->applicationReposiory->findApplicationsForMonitoring();
+
+                $selected_applications = [];
+
+                if (! $webhook->exists) {
+                    abort(404);
+                }
+
+                if ($webhook) {
+                    $wb_applications = $webhook->applications;
+
+                    if ($wb_applications) {
+                        foreach ($wb_applications as $application) {
+                            $selected_applications[] = $application->applications->application_code;
+                        }
+                    }
+                }
+
                 $response['success'] = true;
+                $response['data']['html'] = view('webhook.partials.edit_form', [
+                    'webhook' => $webhook,
+                    'applications' => $applications,
+                    'selected_applications' => $selected_applications
+                ])->render();
+
                 $http_code = 200;
             }
         }

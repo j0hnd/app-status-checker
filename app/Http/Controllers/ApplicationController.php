@@ -160,7 +160,14 @@ class ApplicationController extends Controller
             Application::set_endpoint_info($endpoint_info);
 
             if ($application->save()) {
+                $application = $this->applicationRepository->findByApplicationCode($code);
+
                 $response['success'] = true;
+                $response['data']['html'] = view('application.partials.edit_form', [
+                    'application' => $application,
+                    'groups' => $this->applicationRepository->getGroups()
+                ])->render();
+
                 $http_code = 200;
             }
         }
@@ -253,7 +260,8 @@ class ApplicationController extends Controller
                             'application_name' => $application->name,
                             'application_code' => $application->application_code,
                             'created_at' => $logs->created_at->format('M d, Y H:i:s'),
-                            'http_code' => $logs->http_code
+                            'http_code' => $logs->http_code,
+                            'is_public' => false
                         ])->render();
 
                         $response = [

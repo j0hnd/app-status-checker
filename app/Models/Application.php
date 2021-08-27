@@ -79,7 +79,8 @@ class Application extends Model
     public function health_logs()
     {
         return $this->hasMany(HealthLog::class, 'application_id', 'id')
-            ->orderBy('id', 'desc');
+            ->orderBy('id', 'desc')
+            ->limit(10);
     }
 
     public function save($options = [])

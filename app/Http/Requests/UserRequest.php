@@ -36,7 +36,7 @@ class UserRequest extends FormRequest
         switch ($this->method()) {
             case 'POST':
                 $rules = [
-                    'email' => 'required|email|unique:users,email',
+                    'email' => 'required|email|unique:users,email,NULL,id,deleted_at,NULL'
                 ];
 
                 break;
@@ -51,7 +51,7 @@ class UserRequest extends FormRequest
                 }
 
                 $rules = [
-                        'email' => 'required|email|unique:users,email,' . $id
+                        'email' => 'required|email|unique:users,email,' . $id . ',id,deleted_at,NULL'
                     ];
 
                 break;

@@ -32,7 +32,10 @@
 
                     <div class="card-body">
                         <div class="row">
-                            @include('dashboard.partials.row', ['applications' => $applications])
+                            @include('dashboard.partials.row', [
+                                'applications' => $applications,
+                                'is_public' => true
+                            ])
                         </div>
                     </div>
                 </div>

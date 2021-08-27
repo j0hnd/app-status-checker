@@ -67,4 +67,35 @@ class HeartbeatController extends Controller
 
         return response()->json($response, $http_code);
     }
+
+    public function recent_logs(CommonRequest $request, $code): JsonResponse
+    {
+        $response = ['success' => false];
+        $http_code = 400;
+
+        if ($request->ajax()) {
+            $application = $this->applicationRepository->findByApplicationCode($code);
+
+            if ($application) {
+                $logs = $this->healthLogRepository->getRecentApplicationLogs($application->id);
+
+                if ($logs) {
+                    $content = view('heartbeat.partials.logs', ['logs' => $logs])->render();
+                } else {
+                    $content = "";
+                }
+
+                $response = [
+                    'success' => true,
+                    'data' => [
+                        'content' => $content
+                    ]
+                ];
+
+                $http_code = 200;
+            }
+        }
+
+        return response()->json($response, $http_code);
+    }
 }

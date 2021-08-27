@@ -10,3 +10,30 @@
 // AdminLTE
 @import "~admin-lte/dist/css/adminlte.css";
 @import "~admin-lte/plugins/fontawesome-free/css/all.css";
+
+
+.brand-image {
+    opacity: .8 !important;
+}
+
+.logo {
+    width: 60px !important;
+    height: 60px !important;
+}
+
+.width-100 {
+    width: 100% !important;
+}
+
+.width-95 {
+    width: 95% !important;
+}
+
+.width-40 {
+    width: 40% !important;
+}
+
+.small-note {
+    color: #000;
+    font-size: 11px;
+}

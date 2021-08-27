@@ -28,7 +28,7 @@
     </div>
     <div class="form-group">
         <label for="applicationDescription">Description</label>
-        <textarea class="form-control" name="description" id="applicationDescription">{{ isset($application) ? $application->description : old('description') }}</textarea>
+        <textarea class="form-control" name="description" id="applicationDescription">{!! isset($application) ? html_entity_decode($application->description) : old('description') !!}</textarea>
     </div>
     <div class="form-check p-3">
         <input class="form-check-input" type="checkbox" value="on" id="monitored" name="is_monitored" {{ isset($application) ? $application->is_monitored === 1 ? "checked" : "" : "" }}>
